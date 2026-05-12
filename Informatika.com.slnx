@@ -2,5 +2,6 @@
   <Project Path="Informatika.com/Informatika.Application.csproj" />
   <Project Path="Informatika.Database/Informatika.Database.csproj" />
   <Project Path="Informatika.Domain/Informatika.Domain.csproj" />
+  <Project Path="Informatika.Repository/Informatika.Repository.csproj" />
   <Project Path="Templates/Templates.csproj" />
 </Solution>
