@@ -8,12 +8,12 @@ namespace Informatika.Database
         public InformatikaDbContext(DbContextOptions options)
             : base(options) { }
 
-        DbSet<ConfirmedTask> ConfirmedTasks { get; set; }
-        DbSet<Lection> Lections { get; set; }
-        DbSet<LectionResource> LectionResources { get; set; }
-        DbSet<LectionTask> LectionTasks { get; set; }
-        DbSet<TaskResource> TaskResources { get; set; }
-        DbSet<User> Users { get; set; }
+        public DbSet<ConfirmedTask> ConfirmedTasks { get; set; }
+        public DbSet<Lection> Lections { get; set; }
+        public DbSet<LectionResource> LectionResources { get; set; }
+        public DbSet<LectionTask> LectionTasks { get; set; }
+        public DbSet<TaskResource> TaskResources { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

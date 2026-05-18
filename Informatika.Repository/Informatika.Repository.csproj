@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Informatika.Database\Informatika.Database.csproj" />
+  </ItemGroup>
+
 </Project>
