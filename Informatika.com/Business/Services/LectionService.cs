@@ -84,10 +84,20 @@ namespace Informatika.Application.Business.Services
             }
         }
 
-        public async Task<ServiceResponse<Lection>> DeleteAsync(Lection lection)
+        public async Task<ServiceResponse<Lection>> DeleteAsync(Guid Id)
         {
             try
             {
+                var lection = await _lectionsRepository.GetLectionByIdAsync(Id);
+                if(lection == null)
+                {
+                    return new ServiceResponse<Lection>
+                    {
+                        Success = false,
+                        Error = "Лекция не найдена"
+                    };
+                }
+
                 await _lectionsRepository.DeleteLectionAsync(lection);
                 return new ServiceResponse<Lection>
                 {
