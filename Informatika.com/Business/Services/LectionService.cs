@@ -4,7 +4,7 @@ using Informatika.Repository.Interfaces;
 
 namespace Informatika.Application.Business.Services
 {
-    public class LectionService
+    public class LectionService : ILectionService
     {
         private readonly ILectionsRepository _lectionsRepository;
 
@@ -12,14 +12,14 @@ namespace Informatika.Application.Business.Services
         {
             _lectionsRepository = lectionsRepository;
         }
-        
+
         public async Task<ServiceResponse<Lection>> GetByIdAsync(Guid LectionId)
         {
             try
             {
                 var lection = await _lectionsRepository.GetLectionByIdAsync(LectionId);
 
-                if(lection != null)
+                if (lection != null)
                 {
                     return new ServiceResponse<Lection>
                     {
@@ -89,7 +89,7 @@ namespace Informatika.Application.Business.Services
             try
             {
                 var lection = await _lectionsRepository.GetLectionByIdAsync(Id);
-                if(lection == null)
+                if (lection == null)
                 {
                     return new ServiceResponse<Lection>
                     {
