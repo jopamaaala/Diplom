@@ -126,6 +126,18 @@ namespace Informatika.Application.Business.Services
                     lection.Title = request.Title;
                     lection.Description = request.Description;
                     lection.LectionText = request.LectionText;
+                    lection.LectionResources = request.Resources
+                        .Select(lr => new LectionResource
+                        {
+                            Path = lr.Path
+                        }).ToList();
+                    lection.LectionTasks = request.Tasks
+                        .Select(lt => new LectionTask
+                        {
+                            Title = lt.Title,
+                            DeadLine = lt.DeadLine,
+                            Description = lt.Description
+                        }).ToList();
 
                     await _lectionsRepository.UpdateLectionAsync(lection);
 
@@ -160,7 +172,19 @@ namespace Informatika.Application.Business.Services
                 {
                     Title = request.Title,
                     Description = request.Description,
-                    LectionText = request.LectionText
+                    LectionText = request.LectionText,
+                    LectionResources = request.Resources
+                    .Select(lr => new LectionResource
+                    {
+                        Path = lr.Path
+                    }).ToList(),
+                    LectionTasks = request.Tasks
+                        .Select(lt => new LectionTask
+                        {
+                            Title = lt.Title,
+                            DeadLine = lt.DeadLine,
+                            Description = lt.Description
+                        }).ToList()
                 };
 
                 await _lectionsRepository.AddLectionAsync(lection);
