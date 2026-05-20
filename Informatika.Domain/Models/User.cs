@@ -26,10 +26,5 @@ namespace Informatika.Domain.Models
 
         public Guid? GroupId { get; set; }
         public Group? Group { get; set; }
-
-        public static implicit operator User(string v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

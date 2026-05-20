@@ -28,6 +28,17 @@ namespace Informatika.Repository.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<Lection>> SearchLections(string query)
+        {
+            return await _context.Lections
+            .AsNoTracking()
+            .Where(l =>
+                EF.Functions.Like(
+                    l.Title,
+                    $"%{query}%"))
+            .ToListAsync();
+        }
+
         public async Task AddLectionAsync(Lection lection)
         {
             _context.Lections

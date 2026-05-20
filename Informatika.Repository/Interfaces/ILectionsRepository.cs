@@ -8,6 +8,7 @@ namespace Informatika.Repository.Interfaces
         Task DeleteLectionAsync(Lection lection);
         Task<Lection?> GetLectionByIdAsync(Guid id);
         Task<List<Lection>> GetLectionsListAsync();
+        Task<List<Lection>> SearchLections(string query);
         Task UpdateLectionAsync(Lection lection);
     }
 }

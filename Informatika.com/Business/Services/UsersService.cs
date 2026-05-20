@@ -1,8 +1,9 @@
 ﻿using Informatika.Application.Business.Helpers;
 using Informatika.Application.Business.Services.Interfaces;
-using Informatika.Application.Models;
+using Informatika.Application.Models.Requests;
 using Informatika.Domain.Models;
 using Informatika.Repository.Interfaces;
+using Microsoft.AspNetCore.Connections.Features;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Informatika.Application.Services
@@ -135,6 +136,44 @@ namespace Informatika.Application.Services
             }
         }
 
+        public async Task<ServiceResponse<User>> UpdateProfileAsync(UserProfileRequest request, Guid Id)
+        {
+            try
+            {
+                var user = await _usersRepository.GetUserByIdAsync(Id);
 
+                if (user != null && await _usersRepository.GetUserByEmailAsync(request.Email) == null && await _usersRepository.GetUserByUsernameAsync(request.Username) == null)
+                {
+                    user.Username = request.Username;
+                    user.LastName = request.LastName;
+                    user.FirstName = request.FirstName;
+                    user.AvatarURL = request.AvatarUrl;
+                    user.Email = request.Email;
+
+                    await _usersRepository.UpdateUserAsync(user);
+
+                    return new ServiceResponse<User>
+                    {
+                        Success = true,
+                        Data = user
+                    };
+                }
+
+                return new ServiceResponse<User>
+                {
+                    Success = false,
+                    Error = "Пользователь не найден"
+                };
+            }
+            catch(Exception ex)
+            {
+                return new ServiceResponse<User>
+                {
+                    Success= false,
+                    Error = ex.Message
+                };
+
+            }
+        }
     }
 }

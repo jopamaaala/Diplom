@@ -1,4 +1,4 @@
-﻿using Informatika.Application.Models;
+﻿using Informatika.Application.Models.Requests;
 using Informatika.Domain.Models;
 
 namespace Informatika.Application.Business.Services.Interfaces

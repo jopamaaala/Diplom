@@ -1,4 +1,4 @@
-﻿namespace Informatika.Application.Models
+﻿namespace Informatika.Application.Models.Requests
 {
     public class UserLoginRequest
     {

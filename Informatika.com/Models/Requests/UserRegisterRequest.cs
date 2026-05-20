@@ -1,6 +1,6 @@
 ﻿using Informatika.Domain.Enums;
 
-namespace Informatika.Application.Models
+namespace Informatika.Application.Models.Requests
 {
     public class UserRegisterRequest
     {
