@@ -10,7 +10,7 @@ namespace Informatika.Application.Business.Helpers
     {
         public string GenerateToken(User User)
         {
-            Claim[] claims = [new(("userId"), User.Id.ToString())];
+            Claim[] claims = [new("userId", User.Id.ToString())];
 
             var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SecretKey")),

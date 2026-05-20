@@ -1,4 +1,5 @@
 ﻿using Informatika.Application.Business.Helpers;
+using Informatika.Application.Business.Services.Interfaces;
 using Informatika.Application.Models;
 using Informatika.Domain.Models;
 using Informatika.Repository.Interfaces;
@@ -17,11 +18,11 @@ namespace Informatika.Application.Services
             _jwtProvider = jwtProvider;
         }
 
-        public async Task<List<User>?> GetAllUsersAsync()
+        public async Task<User?> GetByUsernameAsync(string Username)
         {
             try
             {
-                return await _usersRepository.GetListAsync();
+                return await _usersRepository.GetUserByUsernameAsync(Username);
             }
             catch
             {
@@ -29,24 +30,11 @@ namespace Informatika.Application.Services
             }
         }
 
-        public async Task<User?> GetUserAsync(Guid id)
-        {
-            try
-            {
-                return await _usersRepository.GetUserByIdAsync(id);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public async Task<User?> GetEmailAsync(string email)
+        public async Task<User?> GetByEmailAsync(string email)
         {
             try
             {
                 return await _usersRepository.GetUserByEmailAsync(email);
-
             }
             catch
             {
@@ -54,15 +42,30 @@ namespace Informatika.Application.Services
             }
         }
 
-        public async Task<ServiceResponce<User>> RegisterAsync(UserRegisterRequest model, HttpContext context)
+        public async Task<ServiceResponse<string>> RegisterAsync(UserRegisterRequest model)
         {
             try
             {
                 if (model.Password != model.ConfirmPassword)
                 {
-                    return new ServiceResponce<User>
+                    return new ServiceResponse<string>
                     {
                         Error = "Введёные пароли не совпадают!"
+                    };
+                }
+
+                if (await GetByEmailAsync(model.Email) != null)
+                {
+                    return new ServiceResponse<string>
+                    {
+                        Error = "Пользователь с такой почтой уже существует"
+                    };
+                }
+                else if (await GetByUsernameAsync(model.Username) != null)
+                {
+                    return new ServiceResponse<string>
+                    {
+                        Error = "Пользователь с таким именем пользователя уже существует"
                     };
                 }
 
@@ -78,23 +81,22 @@ namespace Informatika.Application.Services
 
                 await _usersRepository.AddUserAsync(user);
 
-                return await LoginAsync(new UserLoginRequest
-                { Email = model.Email, Username = model.Username, Password = model.Password }, context);
+                return await LoginAsync(new UserLoginRequest { Email = model.Email, Username = model.Username, Password = model.Password });
             }
-            catch
+            catch (Exception ex)
             {
-                return new ServiceResponce<User>
+                return new ServiceResponse<string>
                 {
-                    Error = "Пользователь с такой почтой или именем уже существует"
+                    Error = ex.Message
                 };
             }
         }
 
-        public async Task<ServiceResponce<User>> LoginAsync(UserLoginRequest model, HttpContext context)
+        public async Task<ServiceResponse<string>> LoginAsync(UserLoginRequest model)
         {
             try
             {
-                var user = await _usersRepository.GetUserByEmailAsync(model.Email);
+                var user = await GetByEmailAsync(model.Email) ?? await GetByUsernameAsync(model.Username);
 
                 if (user != null)
                 {
@@ -103,21 +105,21 @@ namespace Informatika.Application.Services
                     if (result)
                     {
                         var token = _jwtProvider.GenerateToken(user);
-                        return new ServiceResponce<User>
+                        return new ServiceResponse<string>
                         {
                             Success = true,
-                            Data = user
+                            Data = token
                         };
                     }
 
-                    return new ServiceResponce<User>
+                    return new ServiceResponse<string>
                     {
                         Success = false,
                         Error = "Во время авторизации произошла ошибка, попробуйте ещё раз"
                     };
                 }
 
-                return new ServiceResponce<User>
+                return new ServiceResponse<string>
                 {
                     Success = false,
                     Error = "Почта или пароль введены не верно"
@@ -125,9 +127,9 @@ namespace Informatika.Application.Services
             }
             catch (Exception ex)
             {
-                return new ServiceResponce<User>
+                return new ServiceResponse<string>
                 {
-                    Succes = false,
+                    Success = false,
                     Error = ex.Message
                 };
             }

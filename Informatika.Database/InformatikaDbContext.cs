@@ -14,6 +14,8 @@ namespace Informatika.Database
         public DbSet<LectionTask> LectionTasks { get; set; }
         public DbSet<TaskResource> TaskResources { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<UserActionLog> UserActionLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Informatika.Application.Models
 {
-    public class ServiceResponce<T>
+    public class ServiceResponse<T>
     {
         public bool Success { get; set; } = false;
         public string? Error { get; set; }
